@@ -4,18 +4,18 @@ include_once('./model/event.php');
 
 // master(parent) web scrapper class for artsvista.com
 class Master {
-	private $frontHtml;
-	private $backHtml;
+	private $frontUrl;
+	private $backUrl;
 	private $page;
 	private $eventArray;
 	private $htmlCode;
 	
 	/**
-	*	insert '' to $backHtml and $page if empty
+	*	insert '' to $backUrl and $page if empty
 	*/
-	function __construct($frontHtml, $backHtml, $page) { 
-		$this->frontHtml 	= $frontHtml;
-		$this->backHtml 	= $backHtml;
+	function __construct($frontUrl, $backUrl, $page) { 
+		$this->frontUrl 	= $frontUrl;
+		$this->backUrl 		= $backUrl;
 		$this->page			= $page;
 		$this->setHtmlCode();
 	}
@@ -50,22 +50,30 @@ class Master {
 		$this->eventArray = $eventArray;
 	}
 	public function setHtmlCode(){
-		$this->htmlCode = file_get_html($this->frontHtml . $this->page . $this->backHtml);
+		$this->htmlCode = file_get_html($this->frontUrl . $this->page . $this->backUrl);
 	}
-	public function returnInnertextOrNull($variable){
+	public function returnInnertextOrNull($variable, $frontAttach, $backAttach){
 		if ($variable == null){
 			return null;
 		}
 		else {
-			return $variable->innertext;
+			return $frontAttach . $variable->innertext . $backAttach;
 		}
 	}
-	public function returnSrcOrNull($variable){
+	public function returnSrcOrNull($variable, $frontAttach, $backAttach){
 		if ($variable == null){
 			return null;
 		}
 		else {
-			return $variable->src;
+			return $frontAttach . $variable->src . $backAttach;
+		}
+	}
+	public function returnHrefOrNull($variable, $frontAttach, $backAttach){
+		if ($variable == null){
+			return null;
+		}
+		else {
+			return $frontAttach . $variable->href . $backAttach;
 		}
 	}
 	public function scrapEvents(){}
