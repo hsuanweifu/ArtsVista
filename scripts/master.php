@@ -52,12 +52,18 @@ class Master {
 	public function setHtmlCode(){
 		$this->htmlCode = file_get_html($this->frontUrl . $this->page . $this->backUrl);
 	}
+	// next page
+	public function nextPage(){
+		$this->page = $this->page + 1;
+		$this->setHtmlCode();
+	}
+	// returns
 	public function returnInnertextOrNull($variable, $frontAttach, $backAttach){
 		if ($variable == null){
 			return null;
 		}
 		else {
-			return $frontAttach . $variable->innertext . $backAttach;
+			return strip_tags($frontAttach . $variable->innertext . $backAttach);
 		}
 	}
 	public function returnSrcOrNull($variable, $frontAttach, $backAttach){
@@ -65,7 +71,7 @@ class Master {
 			return null;
 		}
 		else {
-			return $frontAttach . $variable->src . $backAttach;
+			return strip_tags($frontAttach . $variable->src . $backAttach);
 		}
 	}
 	public function returnHrefOrNull($variable, $frontAttach, $backAttach){
@@ -73,7 +79,7 @@ class Master {
 			return null;
 		}
 		else {
-			return $frontAttach . $variable->href . $backAttach;
+			return strip_tags($frontAttach . $variable->href . $backAttach);
 		}
 	}
 	public function scrapEvents(){}

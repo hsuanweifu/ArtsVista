@@ -2,6 +2,7 @@
 include_once('scripts/straight.php');
 $straight = new Straight();
 $straight->scrapEvents();
+
 /*
 for ($i = 0; $i < 3; $i++){
 	$html= file_get_html('http://www.straight.com/listings/arts?page='.$i.'&text=');
