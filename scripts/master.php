@@ -7,7 +7,7 @@ class Master {
 	private $frontUrl;
 	private $backUrl;
 	private $page;
-	private $eventArray;
+	private $eventArray = array();
 	private $htmlCode;
 	
 	/**
@@ -82,6 +82,93 @@ class Master {
 			return strip_tags($frontAttach . $variable->href . $backAttach);
 		}
 	}
+	public function returnText($variable){
+		if ($variable == null){
+			return 'null';
+		}
+		else {
+			return '"' . str_replace('"','\"', $variable) . '"';
+		}
+	}
+
 	public function scrapEvents(){}
-	public function storeEvents(){} // to be implemented to database
+	// database
+	public function storeEvents(){
+		$servername = "localhost";
+		$username 	= "root";
+		$password 	= "rf26473156";
+		$dbname 	= "artsvista_scrap";
+
+
+		// Create connection
+		$conn = new mysqli($servername, $username, $password, $dbname);
+
+		// Check connection
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		} 
+		echo "Connected successfully";
+
+		foreach($this->eventArray as $event){
+			$eventId 	= $this->insertEvents($conn, $event);
+			$venueId 	= $this->insertVenues($conn, $event, $eventId);
+			$timeId		= $this->insertTimes($conn, $event, $eventId, $venueId);
+		}
+		
+		//echo mysqli_insert_id($conn);
+
+		$conn->close();
+	}
+	public function insertEvents($conn, $event){
+		
+		$sql = 'INSERT INTO events (title, subtitle, category, subcategory, description, picture, videoUrl)
+		VALUES (' 
+		. $this->returnText($event->getTitle()) 		. ','
+		. $this->returnText($event->getSubtitle())		. ','
+		. $this->returnText($event->getCategory()) 		. ','
+		. $this->returnText($event->getSubcategory()) 	. ','
+		. $this->returnText($event->getDescription()) 	. ','
+		. $this->returnText($event->getPicture()) 		. ','
+		. $this->returnText($event->getVideoUrl()) 		. ')';
+
+		if ($conn->query($sql) === TRUE) {
+			echo "New record created successfully";
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		return mysqli_insert_id($conn);
+	}
+	public function insertTimes($conn, $event, $eventId, $venueId){
+		$sql = 'INSERT INTO times (eventId, venueId, startDate, endDate, startTime)
+		VALUES ('
+		. $eventId									. ','
+		. $venueId							 		. ','
+		. $this->returnText($event->getStartDate()) . ','
+		. $this->returnText($event->getEndDate())	. ','
+		. $this->returnText($event->getStartTime()) . ')';
+
+		if ($conn->query($sql) === TRUE) {
+			echo "New record created successfully";
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		return mysqli_insert_id($conn);
+	}
+	public function insertVenues($conn, $event, $eventId){
+		$sql = 'INSERT INTO venues (eventId, address, city, province, ticketUrl, ticketPrice)
+		VALUES ('
+		. $eventId 										. ','
+		. $this->returnText($event->getAddress()) 		. ','
+		. $this->returnText($event->getCity()) 			. ','
+		. $this->returnText($event->getProvince()) 		. ','
+		. $this->returnText($event->getTicketUrl()) 	. ','
+		. $this->returnText($event->getTicketPrice()) 	. ')';
+
+		if ($conn->query($sql) === TRUE) {
+			echo "New record created successfully";
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		return mysqli_insert_id($conn);
+	}
 }
