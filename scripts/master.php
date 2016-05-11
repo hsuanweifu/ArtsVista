@@ -82,11 +82,10 @@ class Master {
 			return strip_tags($frontAttach . $variable->href . $backAttach);
 		}
 	}
-	public function returnActionOrNull($variable, $frontAttach, $backAttach){
-		if ($variable == null){
+	public function returnActionOrNull($variable, $frontAttach, $backAttach) {
+		if ($variable == null) {
 			return null;
-		}
-		else {
+		} else {
 			return strip_tags($frontAttach . $variable->action . $backAttach);
 		}
 	}
@@ -96,6 +95,14 @@ class Master {
 		}
 		else {
 			return '"' . str_replace('"','\"', $variable) . '"';
+		}
+	}
+	public function returnEqualVariableOrIsNull($variable){
+		if ($variable == null){
+			return 'IS null';
+		}
+		else {
+			return '= "' . str_replace('"','\"', $variable) . '"';
 		}
 	}
 
@@ -121,6 +128,7 @@ class Master {
 			$eventId 	= $this->insertEvents($conn, $event);
 			$venueId 	= $this->insertVenues($conn, $event, $eventId);
 			$timeId		= $this->insertTimes($conn, $event, $eventId, $venueId);
+			//$this->findEvent($conn, $event->getTitle(), $event->getSubtitle(), $event->getCategory(), $event->getSubcategory());
 		}
 		
 		//echo mysqli_insert_id($conn);
@@ -179,4 +187,27 @@ class Master {
 		}
 		return mysqli_insert_id($conn);
 	}
+	public function findEvent($conn, $title, $subtitle, $category, $subcategory){
+		$sql = 'SELECT 	*
+				FROM 	events
+				WHERE 	title 		' . $this->returnEqualVariableOrIsNull($title)		. '
+				AND		subtitle	' . $this->returnEqualVariableOrIsNull($subtitle)	. '
+				AND		category	' . $this->returnEqualVariableOrIsNull($category) 	. '
+				AND 	subcategory ' . $this->returnEqualVariableOrIsNull($subcategory);
+		
+		echo $sql . '<br>';
+
+		$result = $conn->query($sql);
+		
+		while($row = $result->fetch_assoc()) {
+			var_dump($row);
+		}
+		if ($result->num_rows > 0) {
+			echo $result->num_rows > 0;
+		} else {
+			echo "0 results";
+		}
+	}
+	public function findTime($conn, $eventId, $venueId, $startDate, $endDate){}
+	public function findVenue($conn, $eventId, $address, $city, $province){}
 }
