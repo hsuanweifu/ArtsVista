@@ -1,7 +1,13 @@
 <?php
 include_once('scripts/straight.php');
+include_once('scripts/ticketRocket.php');
+
+/*
 $straight = new Straight();
 $straight->scrapEvents();
+*/
+$TicketRocket = new TicketRocket();
+$TicketRocket->scrapEvents();
 //$straight->storeEvents();
 /*
 for ($i = 0; $i < 3; $i++){
