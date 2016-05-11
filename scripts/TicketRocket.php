@@ -39,7 +39,7 @@ class TicketRocket extends Master
                 $location       = explode(",", $this->returnInnertextOrNull($article->find('td b', 0), '', ''));
                 $address        = $location[1];
                 $city           = $location[2];
-                $province       = $location[3];
+                $province       = 'British Columbia';
                 $ticketUrl		= $this->returnActionOrNull($detailHtmlCode->find('div.bar form', 0), '', '');
                 $ticketPrice    = null;
 
