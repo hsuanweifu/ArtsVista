@@ -82,6 +82,14 @@ class Master {
 			return strip_tags($frontAttach . $variable->href . $backAttach);
 		}
 	}
+	public function returnActionOrNull($variable, $frontAttach, $backAttach){
+		if ($variable == null){
+			return null;
+		}
+		else {
+			return strip_tags($frontAttach . $variable->action . $backAttach);
+		}
+	}
 	public function returnText($variable){
 		if ($variable == null){
 			return 'null';
