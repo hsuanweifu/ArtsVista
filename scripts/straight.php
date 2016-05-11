@@ -11,7 +11,10 @@ class Straight extends Master{
 		$htmlCode 	= $this->getHtmlCode();
 		$eventArray	= array();
 		ini_set('max_execution_time', 900); // 15 minutes
-		while(count($htmlCode->find('article.teaser')) != 0){
+		/////////
+		$int_test	= 0;
+		/////////
+		while(count($htmlCode->find('article.teaser')) != 0 && $int_test < 1){
 			foreach($htmlCode->find('article.teaser') as $article){
 				$event			= new Event();
 				// Going into the secondary (detailed) page
@@ -56,8 +59,11 @@ class Straight extends Master{
 			}
 			$this->nextPage();
 			$htmlCode 	= $this->getHtmlCode();
+			$int_test++;
 		}
-		var_dump($eventArray);
+		$this->setEventArray($eventArray);
+		var_dump($this->getEventArray());
+		$this->storeEvents();
 	}
 	public function explodeAddress($longAddress, $i){
 		if($i == 0){
