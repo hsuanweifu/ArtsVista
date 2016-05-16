@@ -105,13 +105,21 @@ class Master {
 			return '= "' . str_replace('"','\"', $variable) . '"';
 		}
 	}
+	public function returnVariableOrNull($variable){
+		if ($variable == null){
+			return 'null';
+		}
+		else {
+			return str_replace('"','\"', $variable);
+		}
+	}
 
 	public function scrapEvents(){}
 	// database
 	public function storeEvents(){
 		$servername = "localhost";
 		$username 	= "root";
-		$password 	= "rf26473156";
+		$password 	= "";
 		$dbname 	= "artsvista_scrap";
 
 
@@ -128,7 +136,6 @@ class Master {
 			$eventId 	= $this->insertEvents($conn, $event);
 			$venueId 	= $this->insertVenues($conn, $event, $eventId);
 			$timeId		= $this->insertTimes($conn, $event, $eventId, $venueId);
-			//$this->findEvent($conn, $event->getTitle(), $event->getSubtitle(), $event->getCategory(), $event->getSubcategory());
 		}
 		
 		//echo mysqli_insert_id($conn);
@@ -136,56 +143,139 @@ class Master {
 		$conn->close();
 	}
 	public function insertEvents($conn, $event){
-		
-		$sql = 'INSERT INTO events (title, subtitle, category, subcategory, description, picture, videoUrl)
-		VALUES (' 
-		. $this->returnText($event->getTitle()) 		. ','
-		. $this->returnText($event->getSubtitle())		. ','
-		. $this->returnText($event->getCategory()) 		. ','
-		. $this->returnText($event->getSubcategory()) 	. ','
-		. $this->returnText($event->getDescription()) 	. ','
-		. $this->returnText($event->getPicture()) 		. ','
-		. $this->returnText($event->getVideoUrl()) 		. ')';
+		$validation	= $this->findEvent($conn, $event->getTitle(), $event->getSubtitle(), $event->getCategory(), $event->getSubcategory());
+		if ($validation->num_rows > 0){
+			echo 'entry already exist<br>';
+			$row 	= $validation->fetch_assoc();
+			$id 	= $row['eventId'];
+			
+			if ($row['description'] ==  null){
+				$row['description'] = $event->getDescription();
+			}
+			if ($row['picture'] ==  null){
+				$row['picture'] = $event->getPicture();
+			}
+			if ($row['videoUrl'] ==  null){
+				$row['videoUrl'] = $event->getVideoUrl();
+			}
+			
+			$sql = 'UPDATE events 
+					SET description="' . $this->returnVariableOrNull($row['description']) . '", picture="' . $this->returnVariableOrNull($row['picture']) . '", videoUrl="' . $this->returnVariableOrNull($row['videoUrl']) . '"
+					WHERE eventId=' . $id;
 
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			if ($conn->query($sql) === TRUE) {
+				echo "Record updated successfully";
+			} else {
+				echo "Error updating record: " . $conn->error;
+			}
+
+			return $id;
 		}
-		return mysqli_insert_id($conn);
+		else {
+			$sql = 'INSERT INTO events (title, subtitle, category, subcategory, description, picture, videoUrl)
+			VALUES (' 
+			. $this->returnText($event->getTitle()) 		. ','
+			. $this->returnText($event->getSubtitle())		. ','
+			. $this->returnText($event->getCategory()) 		. ','
+			. $this->returnText($event->getSubcategory()) 	. ','
+			. $this->returnText($event->getDescription()) 	. ','
+			. $this->returnText($event->getPicture()) 		. ','
+			. $this->returnText($event->getVideoUrl()) 		. ')';
+
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			return mysqli_insert_id($conn);
+		}
 	}
 	public function insertTimes($conn, $event, $eventId, $venueId){
-		$sql = 'INSERT INTO times (eventId, venueId, startDate, endDate, startTime)
-		VALUES ('
-		. $eventId									. ','
-		. $venueId							 		. ','
-		. $this->returnText($event->getStartDate()) . ','
-		. $this->returnText($event->getEndDate())	. ','
-		. $this->returnText($event->getStartTime()) . ')';
+		$validation	= $this->findTime($conn, $eventId, $venueId, $event->getStartDate(), $event->getEndDate());
+		if ($validation->num_rows > 0){
+			echo 'entry already exist<br>';
+			$row 	= $validation->fetch_assoc();
+			$id 	= $row["timeId"];
+			
+			if ($row['startTime'] ==  null){
+				$row['startTime'] = $event->getStartTime();
+			}
+			
+			$sql = 'UPDATE times			
+					SET startTime="' . $this->returnVariableOrNull($row['startTime']) . '"
+					WHERE timeId=' . $id;
 
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			if ($conn->query($sql) === TRUE) {
+				echo "Record updated successfully";
+			} else {
+				echo "Error updating record: " . $conn->error;
+			}
+			
+			return $id;
 		}
-		return mysqli_insert_id($conn);
+		else {
+			$sql = 'INSERT INTO times (eventId, venueId, startDate, endDate, startTime)
+			VALUES ('
+			. $eventId									. ','
+			. $venueId							 		. ','
+			. $this->returnText($event->getStartDate()) . ','
+			. $this->returnText($event->getEndDate())	. ','
+			. $this->returnText($event->getStartTime()) . ')';
+
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			return mysqli_insert_id($conn);
+		}
 	}
 	public function insertVenues($conn, $event, $eventId){
-		$sql = 'INSERT INTO venues (eventId, address, city, province, ticketUrl, ticketPrice)
-		VALUES ('
-		. $eventId 										. ','
-		. $this->returnText($event->getAddress()) 		. ','
-		. $this->returnText($event->getCity()) 			. ','
-		. $this->returnText($event->getProvince()) 		. ','
-		. $this->returnText($event->getTicketUrl()) 	. ','
-		. $this->returnText($event->getTicketPrice()) 	. ')';
+		$validation	= $this->findVenue($conn, $eventId, $event->getAddress(), $event->getCity());
+		if ($validation->num_rows > 0){
+			echo 'entry already exist<br>';
+			$row 	= $validation->fetch_assoc();
+			$id 	= $row["venueId"];
+			
+			if ($row['province'] ==  null){
+				$row['province'] = $event->getProvince();
+			}
+			if ($row['ticketUrl'] ==  null){
+				$row['ticketUrl'] = $event->getTicketUrl();
+			}
+			if ($row['ticketPrice'] ==  null){
+				$row['ticketPrice'] = $event->getTicketPrice();
+			}
+			
+			$sql = 'UPDATE venues 
+					SET province="' . $this->returnVariableOrNull($row['province']) . '", ticketUrl="' . $this->returnVariableOrNull($row['ticketUrl']) . '", ticketPrice="' . $this->returnVariableOrNull($row['ticketPrice']) . '"
+					WHERE venueId=' . $id;
 
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			if ($conn->query($sql) === TRUE) {
+				echo "Record updated successfully";
+			} else {
+				echo "Error updating record: " . $conn->error;
+			}
+			
+			return $id;
 		}
-		return mysqli_insert_id($conn);
+		else {
+			$sql = 'INSERT INTO venues (eventId, address, city, province, ticketUrl, ticketPrice)
+			VALUES ('
+			. $eventId 										. ','
+			. $this->returnText($event->getAddress()) 		. ','
+			. $this->returnText($event->getCity()) 			. ','
+			. $this->returnText($event->getProvince()) 		. ','
+			. $this->returnText($event->getTicketUrl()) 	. ','
+			. $this->returnText($event->getTicketPrice()) 	. ')';
+
+			if ($conn->query($sql) === TRUE) {
+				echo "New record created successfully";
+			} else {
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			return mysqli_insert_id($conn);
+		}
 	}
 	public function findEvent($conn, $title, $subtitle, $category, $subcategory){
 		$sql = 'SELECT 	*
@@ -194,20 +284,31 @@ class Master {
 				AND		subtitle	' . $this->returnEqualVariableOrIsNull($subtitle)	. '
 				AND		category	' . $this->returnEqualVariableOrIsNull($category) 	. '
 				AND 	subcategory ' . $this->returnEqualVariableOrIsNull($subcategory);
-		
-		echo $sql . '<br>';
 
 		$result = $conn->query($sql);
 		
-		while($row = $result->fetch_assoc()) {
-			var_dump($row);
-		}
-		if ($result->num_rows > 0) {
-			echo $result->num_rows > 0;
-		} else {
-			echo "0 results";
-		}
+		return $result;
 	}
-	public function findTime($conn, $eventId, $venueId, $startDate, $endDate){}
-	public function findVenue($conn, $eventId, $address, $city, $province){}
+	public function findTime($conn, $eventId, $venueId, $startDate, $endDate){
+		$sql = 'SELECT 	*
+				FROM 	times
+				WHERE 	eventId 	' . $this->returnEqualVariableOrIsNull($eventId)	. '
+				AND		venueId		' . $this->returnEqualVariableOrIsNull($venueId)	. '
+				AND		startDate	' . $this->returnEqualVariableOrIsNull($startDate) 	. '
+				AND 	endDate 	' . $this->returnEqualVariableOrIsNull($endDate);
+
+		$result = $conn->query($sql);
+		
+		return $result;
+	}
+	public function findVenue($conn, $eventId, $address, $city){
+		$sql = 'SELECT 	*
+				FROM 	venues
+				WHERE 	eventId 	' . $this->returnEqualVariableOrIsNull($eventId)	. '
+				AND		address		' . $this->returnEqualVariableOrIsNull($address)	. '
+				AND		city		' . $this->returnEqualVariableOrIsNull($city);
+		$result = $conn->query($sql);
+		
+		return $result;
+	}
 }

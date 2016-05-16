@@ -10,7 +10,6 @@ class Straight extends Master{
 	public function scrapEvents(){
 		$htmlCode 	= $this->getHtmlCode();
 		$eventArray	= array();
-		ini_set('max_execution_time', 900); // 15 minutes
 		/////////
 		$int_test	= 0;
 		/////////
@@ -62,7 +61,6 @@ class Straight extends Master{
 			$int_test++;
 		}
 		$this->setEventArray($eventArray);
-		var_dump($this->getEventArray());
 		$this->storeEvents();
 	}
 	public function explodeAddress($longAddress, $i){

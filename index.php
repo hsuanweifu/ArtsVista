@@ -1,14 +1,16 @@
 <?php
+ini_set('max_execution_time', 900); // 15 minutes
+
 include_once('scripts/straight.php');
 include_once('scripts/ticketRocket.php');
 
-/*
+
 $straight = new Straight();
 $straight->scrapEvents();
-*/
+
+/*
 $TicketRocket = new TicketRocket();
 $TicketRocket->scrapEvents();
-//$straight->storeEvents();
 /*
 for ($i = 0; $i < 3; $i++){
 	$html= file_get_html('http://www.straight.com/listings/arts?page='.$i.'&text=');

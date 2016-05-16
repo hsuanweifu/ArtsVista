@@ -64,6 +64,7 @@ class TicketRocket extends Master
             $this->nextPage();
             $htmlCode 	= $this->getHtmlCode();
         }
-        var_dump($eventArray);
+		$this->setEventArray($eventArray);
+		$this->storeEvents();
     }
 }
