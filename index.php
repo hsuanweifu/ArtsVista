@@ -13,8 +13,8 @@ $TicketRocket = new TicketRocket();
 $TicketRocket->scrapEvents();
 */
 
-$eventful = new eventful();
-$eventful->scrapEvents();
+$brownpaper = new Brownpaper();
+$brownpaper->scrapEvents();
 
 //$straight->storeEvents();
 /*
