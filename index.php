@@ -1,7 +1,11 @@
 <?php
 include_once('scripts/straight.php');
 include_once('scripts/ticketRocket.php');
-include_once('scripts/eventful.php');
+include_once('scripts/brownpaper.php');
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 /*
 $straight = new Straight();
@@ -13,8 +17,8 @@ $TicketRocket = new TicketRocket();
 $TicketRocket->scrapEvents();
 */
 
-$eventful = new eventful();
-$eventful->scrapEvents();
+$brownpaper = new Brownpaper();
+$brownpaper->scrapEvents();
 
 //$straight->storeEvents();
 /*
