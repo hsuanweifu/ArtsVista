@@ -1,15 +1,20 @@
 <?php
 include_once('scripts/straight.php');
 include_once('scripts/ticketRocket.php');
-include_once('scripts/brownpaper.php');
-include_once('scripts/cineplex.php');
+include_once('scripts/eventful.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+/*
+$straight = new Straight();
+$straight->scrapEvents();
+*/
 
-$cineplex = new Cineplex();
-$cineplex->scrapEvents();
+/*
+$TicketRocket = new TicketRocket();
+$TicketRocket->scrapEvents();
+*/
+
+$brownpaper = new Brownpaper();
+$brownpaper->scrapEvents();
 
 //$straight->storeEvents();
 /*
