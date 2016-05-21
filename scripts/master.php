@@ -89,6 +89,20 @@ class Master {
 			return strip_tags($frontAttach . $variable->action . $backAttach);
 		}
 	}
+    public function returnValueOrNull($variable, $frontAttach, $backAttach) {
+        if ($variable == null) {
+            return null;
+        } else {
+            return strip_tags($frontAttach . $variable->value . $backAttach);
+        }
+    }
+	public function returnContentOrNull($variable, $frontAttach, $backAttach) {
+		if ($variable == null) {
+			return null;
+		} else {
+			return strip_tags($frontAttach . $variable->content . $backAttach);
+		}
+	}
 	public function returnText($variable){
 		if ($variable == null){
 			return 'null';
