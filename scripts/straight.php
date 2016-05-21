@@ -10,14 +10,12 @@ class Straight extends Master{
 	public function scrapEvents(){
 		$htmlCode 	= $this->getHtmlCode();
 		$eventArray	= array();
-		/////////
-		$int_test	= 0;
-		/////////
-		while(count($htmlCode->find('article.teaser')) != 0 && $int_test < 1){
+
+		while(count($htmlCode->find('article.teaser')) != 0){
 			foreach($htmlCode->find('article.teaser') as $article){
 				$event			= new Event();
 				// Going into the secondary (detailed) page
-				$detailUrl		= 'http://www.straight.com' . $this->returnHrefOrNull($article->find('h1 a', 0), '', '');;
+				$detailUrl		= $this->returnHrefOrNull($article->find('h1 a', 0), 'http://www.straight.com', '');;
 				$detailHtmlCode	= file_get_html($detailUrl);
 				$longAddress	= $this->returnInnertextOrNull($detailHtmlCode->find('div.content-main header span a', 0), '', '') . ' '
 								. $this->returnInnertextOrNull($detailHtmlCode->find('div.content-main header span span[itemprop=\'address\']', 0), '', '');
@@ -58,7 +56,6 @@ class Straight extends Master{
 			}
 			$this->nextPage();
 			$htmlCode 	= $this->getHtmlCode();
-			$int_test++;
 		}
 		$this->setEventArray($eventArray);
 		$this->storeEvents();

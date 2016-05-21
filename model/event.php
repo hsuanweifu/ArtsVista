@@ -13,8 +13,11 @@ class Event {
 	private $address;
 	private $city;
 	private $province;
+	private $postalCode;
 	private $ticketUrl;
 	private $ticketPrice;
+	private $sponsor;
+	private $age;
 
 	// constructor
 	function __construct() { } 
@@ -59,11 +62,20 @@ class Event {
 	public function getProvince(){
 		return $this->province;
 	}
+	public function getPostalCode(){
+		return $this->postalCode;
+	}
 	public function getTicketUrl(){
 		return $this->ticketUrl;
 	}
 	public function getTicketPrice(){
 		return $this->ticketPrice;
+	}
+	public function getSponsor(){
+		return $this->sponsor;
+	}
+	public function getAge(){
+		return $this->age;
 	}
 	// setters
 	public function setTitle($title){
@@ -105,11 +117,20 @@ class Event {
 	public function setProvince($province){
 		$this->province = $province;
 	}
+	public function setPostalCode($postalCode){
+		$this->postalCode = $postalCode;
+	}
 	public function setTicketUrl($ticketUrl){
 		$this->ticketUrl = $ticketUrl;
 	}
 	public function setTicketPrice($ticketPrice){
 		$this->ticketPrice = $ticketPrice;
+	}
+	public function setSponsor($sponsor){
+		$this->sponsor = $sponsor;
+	}
+	public function setAge($age){
+		$this->age = $age;
 	}
 
 }

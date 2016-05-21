@@ -119,7 +119,7 @@ class Master {
 	public function storeEvents(){
 		$servername = "localhost";
 		$username 	= "root";
-		$password 	= "";
+		$password 	= "rf26473156";
 		$dbname 	= "artsvista_scrap";
 
 
@@ -252,7 +252,7 @@ class Master {
 					WHERE venueId=' . $id;
 
 			if ($conn->query($sql) === TRUE) {
-				echo "Record updated successfully";
+				echo "Record updated successfully<br>";
 			} else {
 				echo "Error updating record: " . $conn->error;
 			}

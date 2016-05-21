@@ -3,38 +3,25 @@ ini_set('max_execution_time', 900); // 15 minutes
 
 include_once('scripts/straight.php');
 include_once('scripts/ticketRocket.php');
+include_once('scripts/eventbrite.php');
+include_once('scripts/ticketfly.php');
+include_once('scripts/vso.php');
+include_once('scripts/viff.php');
 
 
-$straight = new Straight();
-$straight->scrapEvents();
 
-/*
-$TicketRocket = new TicketRocket();
-$TicketRocket->scrapEvents();
-/*
-for ($i = 0; $i < 3; $i++){
-	$html= file_get_html('http://www.straight.com/listings/arts?page='.$i.'&text=');
-	foreach($html->find('article.teaser') as $article){
-		foreach($article->find('div.date-plate') as $date){
-			echo $date->innertext;
-			echo '<br>';
-		}
-		foreach($article->find('img') as $image){
-			echo 'http:'.$image->src;			
-			echo '<br>';
-		}
-		foreach($article->find('h1 a') as $title){
-			echo $title->innertext;
-			echo '<br>';
-		}
-		foreach($article->find('p.event--venue') as $location){
-			echo $location->innertext;
-			echo '<br>';
-		}
-		foreach($article->find('p.event-day') as $end_date){
-			echo $end_date->innertext;
-			echo '<br>';
-		}
-		echo '<br>';
-	}
-}*/
+//$straight = new Straight();
+//$straight->scrapEvents();
+
+//$ticketRocket = new TicketRocket();
+//$ticketRocket->scrapEvents();
+
+//$ticketfly	= new Ticketfly();
+//$ticketfly->scrapEvents();
+
+//$vso		= new Vso();
+//$vso->scrapEvents();
+
+$viff		= new Viff();
+$viff->scrapEvents();
+
