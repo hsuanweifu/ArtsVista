@@ -28,7 +28,7 @@ class TicketRocket extends Master
                 $subcategory    = null;
                 $searchDescription = $detailHtmlCode->find('div.EventNotes p');
                 $description    = $this->returnInnertextOrNull($detailHtmlCode->find('div.EventNotes p', sizeof($searchDescription) - 5), '', '') . ' -www.ticketrocket.co';
-                $picture 		= $this->returnSrcOrNull($detailHtmlCode->find('div.image img', 0), '', '');
+                $picture 		= 'http://www.ticketrocket.co' . $this->returnSrcOrNull($detailHtmlCode->find('div.image img', 0), '', '');
                 $videoUrl       = null;
                 // separate TicketRocket's time/day of week/day/month/year format into the $date variable
                 $date           = explode(",", $this->returnInnertextOrNull($article->find('td.date', 0), '', ''));

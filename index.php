@@ -7,7 +7,8 @@ include_once('scripts/eventbrite.php');
 include_once('scripts/ticketfly.php');
 include_once('scripts/vso.php');
 include_once('scripts/viff.php');
-
+include_once('scripts/brownpaper.php');
+include_once('scripts/cineplex.php');
 
 
 //$straight = new Straight();
@@ -24,4 +25,7 @@ include_once('scripts/viff.php');
 
 $viff		= new Viff();
 $viff->scrapEvents();
+
+$cineplex = new Cineplex();
+$cineplex->scrapEvents();
 
