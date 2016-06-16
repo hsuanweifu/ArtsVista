@@ -54,6 +54,7 @@ class Cineplex extends Master
         }
         $htmlCode->clear();
         unset($htmlCode);
-        var_dump($eventArray);
+        $this->setEventArray($eventArray);
+		$this->storeEvents();
     }
 }

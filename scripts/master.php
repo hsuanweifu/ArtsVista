@@ -21,11 +21,11 @@ class Master {
 	}
 	
 	// getters
-	public function getFrontHtml(){
-		return $this->frontHtml;
+	public function getFrontUrl(){
+		return $this->frontUrl;
 	}
-	public function getBackHtml(){
-		return $this->backHtml;
+	public function getBackUrl(){
+		return $this->backUrl;
 	}
 	public function getPage(){
 		return $this->page;
@@ -37,11 +37,11 @@ class Master {
 		return $this->htmlCode;
 	}
 	// setters
-	public function setFrontHtml($frontHtml){
-		$this->frontHtml = $frontHtml;
+	public function setFrontUrl($frontUrl){
+		$this->frontUrl = $frontUrl;
 	}
-	public function setBackHtml($backHtml){
-		$this->backHtml = $backHtml;
+	public function setBackUrl($backUrl){
+		$this->backUrl = $backUrl;
 	}
 	public function setPage($page){
 		$this->page = $page;
@@ -131,10 +131,10 @@ class Master {
 	public function scrapEvents(){}
 	// database
 	public function storeEvents(){
-		$servername = "localhost";
-		$username 	= "root";
-		$password 	= "rf26473156";
-		$dbname 	= "artsvista_scrap";
+		$servername = "aa30xq3btfy4si.czifdxu3u9a9.us-west-2.rds.amazonaws.com:3306"; //"localhost";
+		$username 	= ""; //"root";
+		$password 	= "";
+		$dbname 	= "";//"artsvista_scrap";
 
 
 		// Create connection

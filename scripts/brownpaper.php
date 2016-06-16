@@ -13,7 +13,6 @@ class Brownpaper extends Master
     {
         $htmlCode = $this->getHtmlCode();
         $eventArray	= array();
-        ini_set('max_execution_time', 1800);
         while(count($htmlCode->find('a.plainblack')) != 0) {
             foreach ($htmlCode->find('a.plainblack') as $article) {
                 $event = new Event();
@@ -31,7 +30,7 @@ class Brownpaper extends Master
                 $description    = $this->returnInnertextOrNull($detailHtmlCode->find('td[valign=TOP]', 9), '', '') . ' -www.brownpapertickets.com';
                 $picture 		= 'www.brownpapertickets.com' . $this->returnSrcOrNull($detailHtmlCode->find('img', 0), '', '');
                 $videoUrl       = $this->returnValueOrNull($detailHtmlCode->find('param[name=movie]', 0), '', '');;;
-                $date           = null;
+				$date           = null;
                 $time           = null;
                 if (count($detailHtmlCode->find('select[name=date_id]')) != 0) {
                     $date = explode(",", $this->returnInnertextOrNull($detailHtmlCode->find('select[name=date_id]', 0), '', ''));
@@ -49,13 +48,16 @@ class Brownpaper extends Master
                 $locationString = $this->returnInnertextOrNull($detailHtmlCode->find('td[valign=TOP]', 10), '', '');
                 $location       = null;
                 preg_match("/\(View\)(.*)Vancouver|Victoria/", $locationString, $location);
-                $address        = $location[1];
+                $address        = 'error';//$location[1];
                 preg_match("/Vancouver|Victoria/", $locationString, $location);
-                $city           = $location[0];
+                $city           = 'error';//$location[0];
                 $province       = 'BC';
 
                 $ticketUrl		= $detailUrl;
                 $ticketPrice    = null;
+				
+				$ticketUrl  = 'http://www.brownpapertickets.com/ref/1730358/event/' . $this->returnValueOrNull($detailHtmlCode->find('input[name=event_id]', 0), '', '');
+
 
                 $event->setTitle($title);
                 $event->setSubtitle($subtitle);
@@ -77,6 +79,7 @@ class Brownpaper extends Master
             $this->nextPage();
             $htmlCode 	= $this->getHtmlCode();
         }
-        var_dump($eventArray);
+        $this->setEventArray($eventArray);
+		$this->storeEvents();
     }
 }
