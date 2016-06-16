@@ -9,11 +9,13 @@ include_once('scripts/vso.php');
 include_once('scripts/viff.php');
 include_once('scripts/brownpaper.php');
 include_once('scripts/cineplex.php');
+include_once('scripts/seatgeek.php');
 
 echo 'Will take up to 30 minutes to scrap certain sites<br>';
 echo '<a class="button" href="brownpaper_page.php">Brown Paper</a><br>';
 echo '<a class="button" href="cineplex_page.php">Cineplex</a><br>';
 echo '<a class="button" href="straight_page.php">Georgia Straight</a><br>';
+echo '<a class="button" href="seatgeek_page.php">Seatgeak</a><br>';
 echo '<a class="button" href="ticketfly_page.php">Ticketfly</a><br>';
 echo '<a class="button" href="ticketRocket_page.php">TicketRocket</a><br>';
 echo '<a class="button" href="viff_page.php">VIFF</a><br>';
